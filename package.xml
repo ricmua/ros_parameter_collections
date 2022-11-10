@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ros_parameter_collections</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>Wrappers for ROS2 nodes that provide an interface for treating ROS2 parameter groups like Python collection data types.</description>
   <maintainer email="ros@whit.contact">a.whit</maintainer>
   <license>Mozilla Public License 2.0</license>
