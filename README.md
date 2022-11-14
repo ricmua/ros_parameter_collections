@@ -54,11 +54,88 @@ for further information.
 See the [testing documentation](doc/markdown/testing.md) for further 
 information.
 
-## Example
+## Getting started
 
-Forthcoming.[^docstrings]
+Perhaps the best way to get started is via a simple example.
 
-[^docstrings]: See examples in the docstrings of each Python module.
+From within a [configured ROS2 environment], initialize a ROS2 interface.
+
+```python
+>>> import rclpy
+>>> rclpy.init()
+
+```
+
+Use the ROS2 interface to create a ROS2 node.
+
+```python
+>>> import rclpy.node
+>>> node = rclpy.node.Node('test')
+
+```
+
+Add a parameter to the node.
+
+```python
+>>> parameter = node.declare_parameter('parameter_a', 1.0)
+>>> node.get_parameter('parameter_a').value
+1.0
+
+```
+
+Create a mapping interface to the node parameters.
+
+```python
+>>> from ros_parameter_collections import MutableMapping
+>>> mapping = MutableMapping()
+>>> mapping.node = node
+
+```
+
+This mapping can now be treated as a dict-like data structure, in order to 
+access the parameters of the node.[^key_order]
+
+[^key_order]: Note that the order of mapping keys is not guaranteed, which is 
+              consistent with legacy `dict` functionality, but not current 
+              `dict` functionality. In this example, the type of the 
+              `parameter_a` is changed, causing the keys to re-order (when the 
+              parameter is undeclared).
+
+```python
+>>> mapping['parameter_b'] = 2
+>>> mapping['parameter_a'] = 'one'
+>>> list(mapping)
+['parameter_b', 'parameter_a']
+>>> {k: v for (k, v) in mapping.items()}
+{'parameter_b': 2, 'parameter_a': 'one'}
+
+```
+
+Any modifications to the mapping data structure are reflected in the node 
+parameters.
+
+```python
+>>> node.get_parameter('parameter_a').value
+'one'
+>>> node.get_parameter('parameter_b').value
+2
+
+```
+
+Clean up by destroying the node and shutting down the ROS2 interface.
+
+```python
+>>> del mapping
+>>> node.destroy_node()
+>>> rclpy.shutdown()
+
+```
+
+### Additional examples
+
+Further examples are available in the docstrings of each Python module. 
+Additional example documentation is forthcoming.
+
 
 ## License
 
@@ -136,4 +213,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 [Understanding parameters tutorial]: https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Parameters/Understanding-ROS2-Parameters.html
 
 [setdefault]: https://docs.python.org/3/library/stdtypes.html#dict.setdefault
+
+[configured ROS2 environment]: https://docs.ros.org/en/humble/Tutorials/Configuring-ROS2-Environment.html
+
 

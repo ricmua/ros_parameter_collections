@@ -41,6 +41,27 @@ colcon test --event-handler console_cohesion+
 
 See the [ROS2 Python testing] documentation for further information.
 
+### README.md
+
+As an alternative, the [pytest] framework can be directly invoked to verify 
+that the package is functioning as expected, by running the doctests in this 
+README.
+
+```bash
+python path/to/ros_parameter_collections/README.md
+```
+
+This must be done from within a [configured ROS2 environment], as described 
+above. The output of this command should indicate that all tests passed. 
+
+If desired, the doctests can also be run directly from a Python environment.
+
+```python
+import doctest
+doctest.testfile('path/to/README.md', module_relative=False)
+
+```
+
 
 <!---------------------------------------------------------------------
    References
