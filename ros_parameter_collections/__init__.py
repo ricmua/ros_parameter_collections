@@ -43,4 +43,6 @@ from .container import Container
 from .iterable import Iterable
 from .sized import Sized
 from .collection import Collection
+from .mapping import Mapping
+from .mutable_mapping import MutableMapping
 

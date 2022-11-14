@@ -215,13 +215,16 @@ class MutableMapping(Mapping, collections.abc.MutableMapping):
         # Verify that the key is a string.
         if not isinstance(key, str): raise TypeError('Key must be a string')
         
+        # Determine the parameter type. Undeclare the existing parameter, if 
+        # new type does not match the old.
+        type_ = rclpy.parameter.Parameter.Type.from_parameter_value(value)
+        if self.node.has_parameter(key):
+            if self.node.get_parameter(key).type_ != type_:
+                self.node.undeclare_parameter(key)
+        
         # Initialize the parameter object for assignment.
         # This is slightly complicated due to lack of implicit casting by the 
         # rclpy Parameter class.
-        has_parameter = self.node.has_parameter(key)
-        type_ = self.node.get_parameter(key).type_ \
-                if has_parameter \
-                else parameter_type.NOT_SET
         kwargs = dict(name=key, type_=type_, value=type_cast_map[type_](value))
         parameter = rclpy.parameter.Parameter(**kwargs)
         
